@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Билеты ПДД</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="clear">Очистить</string>
+    <string name="back">Назад</string>
+    <string name="password">Пароль</string>
+    <string name="login">Логин</string>
+    <string name="remember_me">Запомнить меня</string>
+    <string name="enter">Войти</string>
+    <string name="ticket_number">Ticket №</string>
+    <string name="score_maxscore">0/0</string>
+    <string name="passed">Passed</string>
+</resources>
