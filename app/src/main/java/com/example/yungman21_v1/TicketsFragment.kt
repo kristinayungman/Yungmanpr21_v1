@@ -78,8 +78,12 @@ class TicketsFragment : Fragment() {
         }
 
         // === Функция обновления UI всех билетов ===
+        // === Функция обновления UI всех билетов ===
         fun updateUI() {
             item.removeAllViews()
+            var correctCount = 0
+            var answeredCount = 0
+
             for (ticket in tickets) {
                 val itemView = LayoutInflater.from(context)
                     .inflate(R.layout.list_item, item, false)
@@ -99,14 +103,21 @@ class TicketsFragment : Fragment() {
                 passedCheckBox.isClickable = false
 
                 when (ticket.isCorrect) {
-                    true -> passedCheckBox.setTextColor(Color.GREEN)
-                    false -> passedCheckBox.setTextColor(Color.RED)
+                    true -> {
+                        passedCheckBox.setTextColor(Color.GREEN)
+                        correctCount++
+                        answeredCount++
+                    }
+                    false -> {
+                        passedCheckBox.setTextColor(Color.RED)
+                        answeredCount++
+                    }
                     null -> passedCheckBox.setTextColor(Color.GRAY)
                 }
 
                 itemView.setOnClickListener {
                     if (ticket.passed) {
-                        Snackbar.make(view, "Билет уже пройден", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(view!!, "Билет уже пройден", Snackbar.LENGTH_SHORT).show()
                     } else {
                         AlertDialog.Builder(requireContext())
                             .setTitle("Билет №${ticket.number}")
@@ -128,6 +139,10 @@ class TicketsFragment : Fragment() {
 
                 item.addView(itemView)
             }
+
+            // Update the summary text
+            val summaryText = "$correctCount / ${tickets.size}"
+            view?.findViewById<TextView>(R.id.scoreSummary)?.text = summaryText
         }
 
         // === Первичный рендер ===
@@ -136,7 +151,7 @@ class TicketsFragment : Fragment() {
         return view
     }
 
-    // === Загрузка билетов: сначала из SharedPreferences, иначе из raw/tickets.json ===
+
     private fun loadTickets(): MutableList<Ticket> {
         val gson = Gson()
         val type = object : TypeToken<MutableList<Ticket>>() {}.type
@@ -146,7 +161,7 @@ class TicketsFragment : Fragment() {
             return try {
                 gson.fromJson(savedJson, type)
             } catch (e: Exception) {
-                // При ошибке — загружаем из сырца
+
                 loadFromRaw()
             }
         }
